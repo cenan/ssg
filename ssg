@@ -4,6 +4,8 @@ import os
 import sys
 import getopt
 
+import dev_server
+
 DEST_DIR = os.getcwd()
 
 def create():
@@ -18,7 +20,14 @@ def create():
 	f.close()
 
 def serve():
-	print "serve"
+	from BaseHTTPServer import HTTPServer
+	from BaseHTTPServer import BaseHTTPRequestHandler
+	try:
+		srv = HTTPServer(("", 9876), dev_server.SsgDevServer)
+		print "Serving on localhost:9876"
+		srv.serve_forever()
+	except KeyboardInterrupt:
+		srv.socket.close()
 
 def usage():
 	print "usage: ssg options"
