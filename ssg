@@ -18,6 +18,7 @@ def create():
 	f.write("version: 1\n")
 	f.write("template_dir: ./templates\n")
 	f.write("output_dir: ./html\n")
+	f.write("serve_dir: ./html\n")
 	f.write("source_dir: ./source\n")
 	f.close()
 
