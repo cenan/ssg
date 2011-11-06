@@ -41,6 +41,7 @@ def serve():
 		srv.serve_forever()
 	except KeyboardInterrupt:
 		srv.socket.close()
+		sys.exit(0)
 
 def usage():
 	print "usage: ssg options"
