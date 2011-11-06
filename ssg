@@ -4,6 +4,7 @@ import os
 import sys
 import getopt
 
+import config
 import dev_server
 
 DEST_DIR = os.getcwd()
