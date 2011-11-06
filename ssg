@@ -36,8 +36,8 @@ def generate():
 			k, v = line.split(":")
 			context[k] = v.strip()
 			line = input_file.readline()
-		content = "\n".join([l for l in input_file])
-		context['content'] = markdown2.markdown(content)
+		content = "".join([l for l in input_file])
+		context['content'] = markdown2.markdown(content, extras=["code-friendly", "code-color"])
 		target_file = os.path.join(config.get("output_dir"), filename) + ".html"
 		open(target_file, "w").write(template.render(context))
 
