@@ -28,9 +28,17 @@ def generate():
 	template = env.get_template("article.html")
 	for f in glob.glob(os.path.join(config.get("source_dir"), "*.md")):
 		filename, _ = os.path.splitext(os.path.basename(f))
-		content  = markdown2.markdown(open(f).read())
+		context = {}
+		input_file = open(f)
+		line = input_file.readline()
+		while line != "\n":
+			k, v = line.split(":")
+			context[k] = v.strip()
+			line = input_file.readline()
+		content = "\n".join([l for l in input_file])
+		context['content'] = markdown2.markdown(content)
 		target_file = os.path.join(config.get("output_dir"), filename) + ".html"
-		open(target_file, "w").write(template.render(content=content))
+		open(target_file, "w").write(template.render(context))
 
 def serve():
 	from BaseHTTPServer import HTTPServer
