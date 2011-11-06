@@ -16,20 +16,20 @@ def create():
 	os.mkdir(os.path.join(DEST_DIR, 'templates'))
 	f = open(os.path.join(DEST_DIR, 'ssg.yaml'), "w")
 	f.write("version: 1\n")
-	f.write("templates: ./templates\n")
-	f.write("html: ./html\n")
-	f.write("source: ./source\n")
+	f.write("template_dir: ./templates\n")
+	f.write("output_dir: ./html\n")
+	f.write("source_dir: ./source\n")
 	f.close()
 
 def generate():
 	import markdown2
 	from jinja2 import Environment, FileSystemLoader
-	env = Environment(loader=FileSystemLoader(config.get("templates")))
+	env = Environment(loader=FileSystemLoader(config.get("template_dir")))
 	template = env.get_template("article.html")
-	for f in glob.glob(os.path.join(config.get("source"), "*.md")):
+	for f in glob.glob(os.path.join(config.get("source_dir"), "*.md")):
 		filename, _ = os.path.splitext(os.path.basename(f))
 		content  = markdown2.markdown(open(f).read())
-		target_file = os.path.join(config.get("html"), filename) + ".html"
+		target_file = os.path.join(config.get("output_dir"), filename) + ".html"
 		open(target_file, "w").write(template.render(content=content))
 
 def serve():
