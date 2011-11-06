@@ -3,6 +3,7 @@
 import os
 import sys
 import getopt
+import glob
 
 import config
 import dev_server
@@ -20,6 +21,17 @@ def create():
 	f.write("source: ./source\n")
 	f.close()
 
+def generate():
+	import markdown2
+	from jinja2 import Environment, FileSystemLoader
+	env = Environment(loader=FileSystemLoader(config.get("templates")))
+	template = env.get_template("article.html")
+	for f in glob.glob(os.path.join(config.get("source"), "*.md")):
+		filename, _ = os.path.splitext(os.path.basename(f))
+		content  = markdown2.markdown(open(f).read())
+		target_file = os.path.join(config.get("html"), filename) + ".html"
+		open(target_file, "w").write(template.render(content=content))
+
 def serve():
 	from BaseHTTPServer import HTTPServer
 	from BaseHTTPServer import BaseHTTPRequestHandler
@@ -33,16 +45,17 @@ def serve():
 def usage():
 	print "usage: ssg options"
 	print "  where options are:"
-	print "    -c[reate] = creates a skeleton project in current directory"
-	print "    -s[erve]  = serves HTML directory on localhost:9876"
+	print "    -c[reate]   = creates a skeleton project in current directory"
+	print "    -g[enerate] = generate the output"
+	print "    -s[erve]    = serves HTML directory on localhost:9876"
 	print "  when using the long forms prepend --"
 	print "  example: ssg --create"
 
 def main():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:],
-				"cs",
-				["create","serve"])
+				"cgs",
+				["create","generate","serve"])
 	except getopt.GetoptError, err:
 		print str(err)
 		usage()
@@ -50,6 +63,8 @@ def main():
 	for o, a in opts:
 		if o in ("-c", "--create"):
 			create()
+		elif o in ("-g", "--generate"):
+			generate()
 		elif o in ("-s", "--serve"):
 			serve()
 	if len(opts) == 0:
