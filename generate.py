@@ -21,7 +21,8 @@ def generate():
 			line = input_file.readline()
 		content = "".join([l for l in input_file])
 		context['content'] = markdown2.markdown(content, extras=["code-friendly", "code-color"])
-		target_file = os.path.join(config.get("output_dir"), filename) + ".html"
+		output_dir = context.get("output_dir", config.get("output_dir"))
+		target_file = os.path.join(output_dir, filename) + ".html"
 		open(target_file, "w").write(template.render(context))
 
 
