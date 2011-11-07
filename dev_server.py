@@ -1,4 +1,5 @@
 import os
+import sys
 from BaseHTTPServer import HTTPServer
 from BaseHTTPServer import BaseHTTPRequestHandler
 import mimetypes
@@ -19,4 +20,13 @@ class SsgDevServer(BaseHTTPRequestHandler):
 			f.close()
 		except IOError:
 			self.send_error(404, "File not found: %s" % self.path)
+
+def serve():
+	try:
+		srv = HTTPServer(("", 9876), SsgDevServer)
+		print "Serving on localhost:9876"
+		srv.serve_forever()
+	except KeyboardInterrupt:
+		srv.socket.close()
+		sys.exit(0)
 
