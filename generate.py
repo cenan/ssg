@@ -19,10 +19,10 @@ def generate():
 			k, v = line.split(":")
 			context[k] = v.strip()
 			line = input_file.readline()
-		content = "".join([l for l in input_file])
+		content = unicode("".join([l for l in input_file]).decode("utf-8"))
 		context['content'] = markdown2.markdown(content, extras=["code-friendly", "code-color"])
 		output_dir = context.get("output_dir", config.get("output_dir"))
 		target_file = os.path.join(output_dir, filename) + ".html"
-		open(target_file, "w").write(template.render(context))
+		open(target_file, "w").write(template.render(context).encode("utf-8"))
 
 
