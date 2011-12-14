@@ -3,7 +3,6 @@
 import os
 import sys
 import getopt
-import glob
 
 import config
 import dev_server
@@ -17,10 +16,10 @@ def create():
 	os.mkdir(os.path.join(DEST_DIR, 'templates'))
 	f = open(os.path.join(DEST_DIR, 'ssg.yaml'), "w")
 	f.write("version: 1\n")
-	f.write("template_dir: ./templates\n")
-	f.write("output_dir: ./html\n")
-	f.write("serve_dir: ./html\n")
-	f.write("source_dir: ./source\n")
+	f.write("templatedir: ./templates\n")
+	f.write("outputdir: ./html\n")
+	f.write("servedir: ./html\n")
+	f.write("sourcedir: ./source\n")
 	f.close()
 
 def usage():
